@@ -1,3 +1,6 @@
+
+This is the dApp part of the Keto recipes project.
+
 ## Getting started
 
 ### Local Development
