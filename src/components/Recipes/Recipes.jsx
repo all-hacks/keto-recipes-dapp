@@ -10,7 +10,7 @@ import {
   withStyles,
 } from '@material-ui/core'
 
-const gravatarStyles = theme =>
+const recipeStyles = theme =>
   createStyles({
     actionArea: {
       maxWidth: 300,
@@ -30,14 +30,18 @@ const gravatarStyles = theme =>
       textOverflow: 'ellipsis',
       overflow: 'hidden',
     },
+    ingredients: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    },
   })
 
-const Gravatar = ({ classes, id, displayName, imageUrl, owner }) => (
+const Recipe = ({ classes, id, displayName, imageUrl, owner, ingredients, steps }) => (
   <Grid item>
     <Card>
       <CardActionArea className={classes.actionArea}>
         {imageUrl && (
-          <CardMedia className={classes.image} image={imageUrl} title={displayName} />
+          <CardMedia className={classes.image} image={"https://spoonacular.com/recipeImages/" + imageUrl} title={displayName + "  Steps: " + steps.join(' | ')} />
         )}
         <CardContent>
           <Typography variant="h6" component="h3" className={classes.displayName}>
@@ -51,36 +55,40 @@ const Gravatar = ({ classes, id, displayName, imageUrl, owner }) => (
           <Typography component="p" className={classes.owner}>
             {owner}
           </Typography>
+          <Typography color="textSecondary">Ingredients</Typography>
+          <Typography component="p" className={classes.ingredients}>
+            {ingredients.join(', ')}
+          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
   </Grid>
 )
 
-const StyledGravatar = withStyles(gravatarStyles)(Gravatar)
+const StyledRecipe = withStyles(recipeStyles)(Recipe)
 
-const gravatarsStyles = theme =>
+const recipesStyles = theme =>
   createStyles({
     title: {
       marginTop: theme.spacing.unit * 2,
     },
   })
 
-const Gravatars = ({ classes, gravatars }) => (
+const Recipes = ({ classes, recipes }) => (
   <Grid container direction="column" spacing={16}>
     <Grid item>
       <Typography variant="title" className={classes.title}>
-        {gravatars.length} Recipes
+        {recipes.length} Recipes
       </Typography>
     </Grid>
     <Grid item>
       <Grid container direction="row" spacing={16}>
-        {gravatars.map(gravatar => (
-          <StyledGravatar key={gravatar.id} {...gravatar} />
+        {recipes.map(recipe => (
+          <StyledRecipe key={recipe.id} {...recipe} />
         ))}
       </Grid>
     </Grid>
   </Grid>
 )
 
-export default withStyles(gravatarsStyles)(Gravatars)
+export default withStyles(recipesStyles)(Recipes)

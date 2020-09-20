@@ -15,6 +15,7 @@ import './App.css'
 import Header from './components/Header'
 import Error from './components/Error'
 import Gravatars from './components/Gravatars'
+import Recipes from './components/Recipes'
 import Filter from './components/Filter'
 
 if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
@@ -37,12 +38,27 @@ const GRAVATARS_QUERY = gql`
   }
 `
 
+const RECIPES_QUERY = gql`
+  query recipes($where: Recipe_filter!, $orderBy: Recipe_orderBy!) {
+    recipes(first: 10, where: $where, orderBy: $orderBy, orderDirection: asc) {
+      id
+      owner
+      displayName
+      imageUrl
+      ingredients
+      steps
+    }
+  }
+`
+
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
       withImage: false,
       withName: false,
+      withSteps: false,
+      withIngredients: false,
       orderBy: 'displayName',
       showHelpDialog: false,
     }
@@ -57,7 +73,7 @@ class App extends Component {
   }
 
   render() {
-    const { withImage, withName, orderBy, showHelpDialog } = this.state
+    const { withImage, withName, withSteps, withIngredients, orderBy, showHelpDialog } = this.state
 
     return (
       <ApolloProvider client={client}>
@@ -68,6 +84,8 @@ class App extends Component {
               orderBy={orderBy}
               withImage={withImage}
               withName={withName}
+              withSteps={withSteps}
+              withIngredients={withIngredients}
               onOrderBy={field => this.setState(state => ({ ...state, orderBy: field }))}
               onToggleWithImage={() =>
                 this.setState(state => ({ ...state, withImage: !state.withImage }))
@@ -75,15 +93,23 @@ class App extends Component {
               onToggleWithName={() =>
                 this.setState(state => ({ ...state, withName: !state.withName }))
               }
+              onToggleWithSteps={() =>
+                this.setState(state => ({ ...state, withSteps: !state.withSteps }))
+              }
+              onToggleWithIngredients={() =>
+                this.setState(state => ({ ...state, withIngredients: !state.withIngredients }))
+              }
             />
             <Grid item>
               <Grid container>
                 <Query
-                  query={GRAVATARS_QUERY}
+                  query={RECIPES_QUERY}
                   variables={{
                     where: {
-                      ...(withImage ? { imageUrl_starts_with: 'http' } : {}),
+                      ...(withImage ? { imageUrl_not: '' } : {}),
                       ...(withName ? { displayName_not: '' } : {}),
+                      ...(withSteps ? { steps_not: [] } : {}),
+                      ...(withIngredients ? { ingredients_not: [] } : {}),
                     },
                     orderBy: orderBy,
                   }}
@@ -94,7 +120,7 @@ class App extends Component {
                     ) : error ? (
                       <Error error={error} />
                     ) : (
-                      <Gravatars gravatars={data.gravatars} />
+                      <Recipes recipes={data.recipes} />
                     )
                   }}
                 </Query>

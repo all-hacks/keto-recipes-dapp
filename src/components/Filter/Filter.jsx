@@ -20,9 +20,13 @@ const Filter = ({
   classes,
   onToggleWithName,
   onToggleWithImage,
+  onToggleWithSteps,
+  onToggleWithIngredients,
   onOrderBy,
   withName,
   withImage,
+  withSteps,
+  withIngredients,
   orderBy,
 }) => (
   <Grid item>
@@ -44,6 +48,24 @@ const Filter = ({
           />
         }
         label="With images"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={withSteps}
+            onChange={event => onToggleWithSteps && onToggleWithSteps()}
+          />
+        }
+        label="With instructions"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={withIngredients}
+            onChange={event => onToggleWithIngredients && onToggleWithIngredients()}
+          />
+        }
+        label="With ingredients"
       />
       <FormControlLabel
         control={
