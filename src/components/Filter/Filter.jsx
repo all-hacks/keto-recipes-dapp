@@ -19,14 +19,12 @@ const filterStyles = theme =>
 const Filter = ({
   classes,
   onToggleWithName,
-  onToggleWithImage,
-  onToggleWithSteps,
-  onToggleWithIngredients,
+  onToggleWithPassportNum,
+  onToggleWithDesignation,
   onOrderBy,
   withName,
-  withImage,
-  withSteps,
-  withIngredients,
+  withPassportNum,
+  withDesignation,
   orderBy,
 }) => (
   <Grid item>
@@ -43,29 +41,20 @@ const Filter = ({
       <FormControlLabel
         control={
           <Checkbox
-            checked={withImage}
-            onChange={event => onToggleWithImage && onToggleWithImage()}
+            checked={withPassportNum}
+            onChange={event => onToggleWithPassportNum && onToggleWithPassportNum()}
           />
         }
-        label="With images"
+        label="With passport num"
       />
       <FormControlLabel
         control={
           <Checkbox
-            checked={withSteps}
-            onChange={event => onToggleWithSteps && onToggleWithSteps()}
+            checked={withDesignation}
+            onChange={event => onToggleWithDesignation && onToggleWithDesignation()}
           />
         }
-        label="With instructions"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={withIngredients}
-            onChange={event => onToggleWithIngredients && onToggleWithIngredients()}
-          />
-        }
-        label="With ingredients"
+        label="With designations"
       />
       <FormControlLabel
         control={
@@ -75,9 +64,8 @@ const Filter = ({
             onChange={event => onOrderBy && onOrderBy(event.target.value)}
           >
             <MenuItem value="id">ID</MenuItem>
-            <MenuItem value="imageUrl">Image</MenuItem>
-            <MenuItem value="displayName">Name</MenuItem>
-            <MenuItem value="owner">Owner</MenuItem>
+            <MenuItem value="referenceNum">Reference Num</MenuItem>
+            <MenuItem value="nationality">Nationality</MenuItem>
           </Select>
         }
         label="Order By:"

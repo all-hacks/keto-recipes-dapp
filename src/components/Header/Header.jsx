@@ -5,7 +5,7 @@ import HelpIcon from '@material-ui/icons/Help'
 const Header = ({ onHelp }) => (
   <Grid container direction="row" alignItems="center" spacing={16}>
     <Grid item>
-      <Typography variant="title">The Keto Cooking dApp</Typography>
+      <Typography variant="title">The Sanction List dApp</Typography>
     </Grid>
   </Grid>
 )
