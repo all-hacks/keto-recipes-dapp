@@ -28,7 +28,7 @@ const client = new ApolloClient({
 
 const SANCTIONS_QUERY = gql`
   query sanctions($where: Sanction_filter!, $orderBy: Sanction_orderBy!) {
-    sanctions(first: 500, where: $where, orderBy: $orderBy, orderDirection: asc) {
+    sanctions(first: 50, where: $where, orderBy: $orderBy, orderDirection: asc) {
       id
       owner
       referenceNum
@@ -49,6 +49,8 @@ class App extends Component {
       withDesignation: false,
       orderBy: 'referenceNum',
       showHelpDialog: false,
+      searchCountry: "",
+      searchName: ""
     }
   }
 
@@ -61,7 +63,7 @@ class App extends Component {
   }
 
   render() {
-    const { withName, withPassportNum, withDesignation, orderBy, showHelpDialog } = this.state
+    const { withName, withPassportNum, withDesignation, orderBy, showHelpDialog, searchCountry, searchName } = this.state
 
     return (
       <ApolloProvider client={client}>
@@ -69,10 +71,14 @@ class App extends Component {
           <Grid container direction="column">
             <Header onHelp={this.toggleHelpDialog} />
             <Filter
+              searchCountry={searchCountry}
+              searchName={searchName}
               orderBy={orderBy}
               withName={withName}
               withPassportNum={withPassportNum}
               withDesignation={withDesignation}
+              onSearchCountry={field => this.setState(state => ({ ...state, searchCountry: field }))}
+              onSearchName={field => this.setState(state => ({ ...state, searchName: field }))}
               onOrderBy={field => this.setState(state => ({ ...state, orderBy: field }))}
               onToggleWithName={() =>
                 this.setState(state => ({ ...state, withName: !state.withName }))
@@ -90,6 +96,8 @@ class App extends Component {
                   query={SANCTIONS_QUERY}
                   variables={{
                     where: {
+                      ...({ nationality_contains: searchCountry ?  searchCountry : "", 
+                          name_contains: searchName ?  [searchName] : [] }),
                       ...(withName ? { name_not: [] } : {}),
                       ...(withPassportNum ? { passportNum_not: [] } : {}),
                       ...(withDesignation ? { designation_not: [] } : {}),

@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   MenuItem,
   Checkbox,
+  TextField,
   createStyles,
   withStyles,
 } from '@material-ui/core'
@@ -12,6 +13,12 @@ import {
 const filterStyles = theme =>
   createStyles({
     orderBySelect: {
+      marginLeft: theme.spacing.unit,
+    },
+    searchCountry: {
+      marginLeft: theme.spacing.unit,
+    },
+    searchName: {
       marginLeft: theme.spacing.unit,
     },
   })
@@ -22,9 +29,13 @@ const Filter = ({
   onToggleWithPassportNum,
   onToggleWithDesignation,
   onOrderBy,
+  onSearchCountry,
+  onSearchName,
   withName,
   withPassportNum,
   withDesignation,
+  searchCountry,
+  searchName,
   orderBy,
 }) => (
   <Grid item>
@@ -70,6 +81,28 @@ const Filter = ({
         }
         label="Order By:"
         labelPlacement="start"
+      />
+    </Grid>
+    <Grid container direction="row">
+      <FormControlLabel
+        control={
+          <TextField 
+            value={searchCountry}
+            className={classes.searchCountry}
+            onChange={event => onSearchCountry && onSearchCountry(event.target.value)}
+          />
+        }
+        label="Search country"
+      />
+      <FormControlLabel
+        control={
+          <TextField 
+            value={searchName}
+            className={classes.searchName}
+            onChange={event => onSearchName && onSearchName(event.target.value)}
+          />
+        }
+        label="Search name"
       />
     </Grid>
   </Grid>
